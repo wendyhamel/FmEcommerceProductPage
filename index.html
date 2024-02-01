@@ -8,37 +8,259 @@
   
   <title>Frontend Mentor | E-commerce product page</title>
 
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-  <style>
-    .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
-  </style>
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind play cdn ( for development and play purposes ) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="src/tailwind.config.js"></script>
+
+  <!-- Alpine.js -->
+  <!-- Alpine Plugins -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- Alpine Core -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+
 </head>
-<body>
+<body x-data="products()">
+  <header>
+    <div class="w-full max-w-6xl mx-auto p-5 flex items-center justify-between gap-5">
+      <section class="flex items-center gap-5">
+        <nav class="md:hidden">
+          <button
+              type="button"
+              x-on:click="menuOpened = true"
+          >
+            <span class="sr-only">icon menu</span>
+            <svg
+                class="h-5 w-6 text-blue-gray-dark"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 15"
+            >
+              <path d="M16 12v3H0v-3h16Zm0-6v3H0V6h16Zm0-6v3H0V0h16Z" fill="currentColor" fill-rule="evenodd"/>
+            </svg>
+          </button>
+          <div
+              x-show="menuOpened"
+              class="relative z-10"
+              aria-labelledby="mobile menu"
+              role="dialog"
+              aria-modal="true"
+          >
+            <div
+              x-show="menuOpened"
+              x-transition:enter="transition ease-in-out duration-500 sm:duration-700"
+              x-transition:enter-start="opacity-0"
+              x-transition:enter-end="opacity-100"
+              x-transition:leave="transition ease-in-out duration-500 sm:duration-700"
+              x-transition:leave-start="opacity-100"
+              x-transition:leave-end="opacity-0"
+              class="fixed inset-0 bg-black/75"
+            ></div>
 
-  Collections
-  Men
-  Women
-  About
-  Contact
+            <div class="fixed inset-0 overflow-hidden">
+              <div class="absolute inset-0 overflow-hidden">
+                <div class="pointer-events-none fixed inset-y-0 left-0 flex max-w-xs pr-10">
+                  <div
+                      x-show="menuOpened"
+                      x-trap.noscroll="menuOpened"
+                      x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
+                      x-transition:enter-start="-translate-x-full"
+                      x-transition:enter-end="translate-x-0"
+                      x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
+                      x-transition:leave-start="translate-x-0"
+                      x-transition:leave-end="-translate-x-full"
+                      class="pointer-events-auto w-screen max-w-xs"
+                  >
+                    <div class="flex h-full flex-col overflow-y-auto bg-white py-6 shadow-xl">
+                      <div class="px-5">
+                        <div class="flex items-start justify-between">
+                          <div class="flex h-7 items-center">
+                            <button x-on:click="menuOpened = false" type="button" class="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                              <span class="sr-only">Close mobile menu</span>
+                              <svg
+                                  aria-hidden="true"
+                                  viewBox="0 0 14 15"
+                                  class="h-5 w-5 text-blue-gray-dark"
+                              >
+                                <path d="m11.596.782 2.122 2.122L9.12 7.499l4.597 4.597-2.122 2.122L7 9.62l-4.595 4.597-2.122-2.122L4.878 7.5.282 2.904 2.404.782l4.595 4.596L11.596.782Z" fill="currentColor" fill-rule="evenodd"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="relative mt-5 flex-1 px-5">
+                        <ul class="space-y-4">
+                          <template x-for="item in menuItems">
+                            <li>
+                              <a href="item.url" x-text="item.title" class="font-bold text-lg"></a>
+                            </li>
+                          </template>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+        <a href="#">
+          <h1 class="sr-only">Sneakers</h1>
+          <img src="./images/logo.svg" alt="sneakers logo">
+        </a>
+        <nav class="hidden md:block">
+          <ul class="flex items-center gap-6">
+            <template x-for="item in menuItems">
+              <li>
+                <a href="item.url" x-text="item.title"></a>
+              </li>
+            </template>
+          </ul>
+        </nav>
+      </section>
+      <section class="flex items-center gap-5">
+        <button type="button">
+          <span class="sr-only">shopping cart</span>
+          <svg
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              viewBox="0 0 22 20"
+              class="h-5 w-5 text-blue-gray-dark"
+          >
+            <path d="M20.925 3.641H3.863L3.61.816A.896.896 0 0 0 2.717 0H.897a.896.896 0 1 0 0 1.792h1l1.031 11.483c.073.828.52 1.726 1.291 2.336C2.83 17.385 4.099 20 6.359 20c1.875 0 3.197-1.87 2.554-3.642h4.905c-.642 1.77.677 3.642 2.555 3.642a2.72 2.72 0 0 0 2.717-2.717 2.72 2.72 0 0 0-2.717-2.717H6.365c-.681 0-1.274-.41-1.53-1.009l14.321-.842a.896.896 0 0 0 .817-.677l1.821-7.283a.897.897 0 0 0-.87-1.114ZM6.358 18.208a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm10.015 0a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm2.021-7.243-13.8.81-.57-6.341h15.753l-1.383 5.53Z" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="rounded-full w-6 h-6" type="button">
+          <span class="sr-only">user avatar</span>
+          <img src="./images/image-avatar.png" alt="user avatar">
+        </button>
+      </section>
+    </div>
+  </header>
+  <main>
 
-  Sneaker Company
+    <section>
+      <section>
+        <div>
+          <img src="./images/image-product-1.jpg" alt="product image 1">
+        </div>
+        <ul>
+          <li>
+            <button>
+              <img src="./images/image-product-1-thumbnail.jpg" alt="product image 1">
+            </button>
+            <button>
+              <img src="./images/image-product-2-thumbnail.jpg" alt="product image 2">
+            </button>
+            <button>
+              <img src="./images/image-product-3-thumbnail.jpg" alt="product image 3">
+            </button>
+            <button>
+              <img src="./images/image-product-4-thumbnail.jpg" alt="product image 4">
+            </button>
+          </li>
+        </ul>
+      </section>
+      <section>
+        <span>Sneaker Company</span>
+        <h2>Fall Limited Edition Sneakers</h2>
+        <p>These low-profile sneakers are your perfect casual wear companion. Featuring a durable rubber outer sole, they’ll withstand everything the weather can offer.</p>
+        <span>$125.00</span>
+        <span>50%</span>
+        <span>$250.00</span>
+        <div>
+          <button>
+            <span class="sr-only">icon minus</span>
+            <svg
+                class="h-5 w-5 text-orange"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 0 12 4"
+            >
+              <defs>
+                <path d="M11.357 3.332A.641.641 0 0 0 12 2.69V.643A.641.641 0 0 0 11.357 0H.643A.641.641 0 0 0 0 .643v2.046c0 .357.287.643.643.643h10.714Z" id="minusa"/>
+              </defs>
+              <use fill="currentColor" xlink:href="#minusa"/>
+            </svg>
+          </button>
+          <span>0</span>
+          <button>
+            <span class="sr-only">icon plus</span>
+            <svg
+                class="h-5 w-5 text-orange"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 0 12 12"
+            >
+              <defs>
+                <path d="M12 7.023V4.977a.641.641 0 0 0-.643-.643h-3.69V.643A.641.641 0 0 0 7.022 0H4.977a.641.641 0 0 0-.643.643v3.69H.643A.641.641 0 0 0 0 4.978v2.046c0 .356.287.643.643.643h3.69v3.691c0 .356.288.643.644.643h2.046a.641.641 0 0 0 .643-.643v-3.69h3.691A.641.641 0 0 0 12 7.022Z" id="plusa"/>
+              </defs>
+              <use fill="currentColor" xlink:href="#plusa"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+    </section>
 
-  Fall Limited Edition Sneakers
-
-  These low-profile sneakers are your perfect casual wear companion. Featuring a 
-  durable rubber outer sole, they’ll withstand everything the weather can offer.
-
-  $125.00
-  50%
-  $250.00
-
-  0
-  Add to cart
-  
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-    Coded by <a href="#">Your Name Here</a>.
-  </div>
+    <button>
+      <span class="sr-only">shopping cart</span>
+      <svg
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          viewBox="0 0 22 20"
+          class="h-5 w-5 text-blue-gray-dark"
+      >
+        <path d="M20.925 3.641H3.863L3.61.816A.896.896 0 0 0 2.717 0H.897a.896.896 0 1 0 0 1.792h1l1.031 11.483c.073.828.52 1.726 1.291 2.336C2.83 17.385 4.099 20 6.359 20c1.875 0 3.197-1.87 2.554-3.642h4.905c-.642 1.77.677 3.642 2.555 3.642a2.72 2.72 0 0 0 2.717-2.717 2.72 2.72 0 0 0-2.717-2.717H6.365c-.681 0-1.274-.41-1.53-1.009l14.321-.842a.896.896 0 0 0 .817-.677l1.821-7.283a.897.897 0 0 0-.87-1.114ZM6.358 18.208a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm10.015 0a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm2.021-7.243-13.8.81-.57-6.341h15.753l-1.383 5.53Z" fill="currentColor"/>
+      </svg>
+      <span>Add to cart</span>
+    </button>
+  </main>
+  <footer>
+    <div>
+      <ul class="flex gap-2">
+        <li>
+          <span class="sr-only">icon delete</span>
+          <svg
+              class="h-5 w-5 text-blue-gray"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 14 16"
+          >
+            <defs>
+              <path d="M0 2.625V1.75C0 1.334.334 1 .75 1h3.5l.294-.584A.741.741 0 0 1 5.213 0h3.571a.75.75 0 0 1 .672.416L9.75 1h3.5c.416 0 .75.334.75.75v.875a.376.376 0 0 1-.375.375H.375A.376.376 0 0 1 0 2.625Zm13 1.75V14.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 1 14.5V4.375C1 4.169 1.169 4 1.375 4h11.25c.206 0 .375.169.375.375ZM4.5 6.5c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Z" id="trasha"/>
+            </defs>
+            <use fill="currentColor" xlink:href="#trasha"/>
+          </svg>
+        </li>
+        <li>
+          <span class="sr-only">icon next</span>
+          <svg
+              class="h-5 w-5 text-blue-gray-deep"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 13 18"
+          >
+            <path d="m2 1 8 8-8 8" stroke="currentColor" stroke-width="3" fill="none"/>
+          </svg>
+        </li>
+      </ul>
+    </div>
+    <section class="fixed bottom-0 inset-x-0 text-center text-xs py-1 bg-white opacity-0 translate-y-2 hover:opacity-90 hover:translate-y-0 transform transition ease-out duration-300 md:py-2">
+      <div class="px-2 text-center">
+        Challenge by <a class="hover:text-orange hover:underline ease-in-out duration-150" href="https://www.frontendmentor.io/challenges/ecommerce-product-page-UPsZ9MJp6" target="_blank">Frontend Mentor</a>.
+        Coded by <a class="hover:text-orange hover:underline ease-in-out duration-150" href="https://www.frontendmentor.io/profile/wendyhamel" target="_blank">Wendy Hamel</a>.
+      </div>
+    </section>
+  </footer>
+  <script src="src/shop.js"></script>
 </body>
 </html>

@@ -28,6 +28,9 @@ window.products = function() {
 		selectImage(id) {
 			this.product.images.forEach((image) => image.active = false)
 			this.product.images.find((image) => image.id === id).active = true
-		}
+		},
+		lightboxActive: false,
+		cartOpened: false,
+		count: 0
 	}
 }

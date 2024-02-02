@@ -85,7 +85,7 @@
                       <div class="px-5">
                         <div class="flex items-start justify-between">
                           <div class="flex h-7 items-center">
-                            <button x-on:click="menuOpened = false" type="button" class="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                            <button x-on:click="menuOpened = false" type="button" class="relative rounded-md bg-white text-blue-gray-dark hover:text-orange focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2">
                               <span class="sr-only">Close mobile menu</span>
                               <svg
                                   aria-hidden="true"
@@ -129,7 +129,7 @@
         </nav>
       </section>
       <section class="flex items-center gap-5">
-        <button type="button">
+        <button type="button" x-on:click="cartOpened = true">
           <span class="sr-only">shopping cart</span>
           <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -140,6 +140,9 @@
             <path d="M20.925 3.641H3.863L3.61.816A.896.896 0 0 0 2.717 0H.897a.896.896 0 1 0 0 1.792h1l1.031 11.483c.073.828.52 1.726 1.291 2.336C2.83 17.385 4.099 20 6.359 20c1.875 0 3.197-1.87 2.554-3.642h4.905c-.642 1.77.677 3.642 2.555 3.642a2.72 2.72 0 0 0 2.717-2.717 2.72 2.72 0 0 0-2.717-2.717H6.365c-.681 0-1.274-.41-1.53-1.009l14.321-.842a.896.896 0 0 0 .817-.677l1.821-7.283a.897.897 0 0 0-.87-1.114ZM6.358 18.208a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm10.015 0a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm2.021-7.243-13.8.81-.57-6.341h15.753l-1.383 5.53Z" fill="currentColor"/>
           </svg>
         </button>
+        <div x-show="cartOpened" class="bg-white">
+          cart open
+        </div>
         <button class="rounded-full w-6 h-6" type="button">
           <span class="sr-only">user avatar</span>
           <img src="./images/image-avatar.png" alt="user avatar">
@@ -150,13 +153,14 @@
   <main>
     <section>
       <section>
-        <div>
+        <button type="button" x-on:click="lightboxActive = true">
           <img :src="selectedImage.full" :alt="selectedImage.alt">
-        </div>
+        </button>
         <ul>
           <template x-for="image in product.images">
             <li>
               <button
+                    type="button"
                     x-on:click="selectImage(image.id)"
                     class="border-2 rounded-xl overflow-hidden"
                     :class="image.active ? 'opacity-50 border-orange' : 'border-transparent opacity-100'"
@@ -176,7 +180,11 @@
         <span><span x-text="product.discount"></span>&#37;</span>
         <span>&dollar;<span x-text="product.fullAmount"></span></span>
         <div>
-          <button>
+          <button
+              x-on:click="count--"
+              type="button"
+              class=""
+          >
             <span class="sr-only">icon minus</span>
             <svg
                 class="h-5 w-5 text-orange"
@@ -191,8 +199,12 @@
               <use fill="currentColor" xlink:href="#minusa"/>
             </svg>
           </button>
-          <span>0</span>
-          <button>
+          <span x-text="count"></span>
+          <button
+              x-on:click="count++"
+              type="button"
+              class=""
+          >
             <span class="sr-only">icon plus</span>
             <svg
                 class="h-5 w-5 text-orange"
@@ -242,17 +254,6 @@
             <use fill="currentColor" xlink:href="#trasha"/>
           </svg>
         </li>
-        <li>
-          <span class="sr-only">icon next</span>
-          <svg
-              class="h-5 w-5 text-blue-gray-deep"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 13 18"
-          >
-            <path d="m2 1 8 8-8 8" stroke="currentColor" stroke-width="3" fill="none"/>
-          </svg>
-        </li>
       </ul>
     </div>
     <section class="fixed bottom-0 inset-x-0 text-center text-xs py-1 bg-white opacity-0 translate-y-2 hover:opacity-90 hover:translate-y-0 transform transition ease-out duration-300 md:py-2">
@@ -262,6 +263,90 @@
       </div>
     </section>
   </footer>
+
+  <div x-show="lightboxActive" class="relative z-10" aria-labelledby="product-images-lightbox" role="dialog" aria-modal="true">
+    <div
+          x-show="lightboxActive"
+          x-transition:enter="ease-out duration-300"
+          x-transition:enter-start="opacity-0"
+          x-transition:enter-end="opacity-100"
+          x-transition:leave="ease-in duration-200"
+          x-transition:leave-start="opacity-100"
+          x-transition:leave-end="opacity-0"
+          class="fixed inset-0 bg-black/75 bg-opacity-75 transition-opacity"
+    ></div>
+
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div
+              x-show="lightboxActive"
+              x-transition:enter="ease-out duration-300"
+              x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+              x-transition:leave="ease-in duration-200"
+              x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+              x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              class="relative transform overflow-hidden text-left transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
+        >
+          <div>
+            <button x-on:click="lightboxActive = false" type="button" class="relative rounded-md text-blue-gray-dark hover:text-orange focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2">
+              <span class="sr-only">Close lightbox</span>
+              <svg
+                      aria-hidden="true"
+                      viewBox="0 0 14 15"
+                      class="h-5 w-5"
+              >
+                <path d="m11.596.782 2.122 2.122L9.12 7.499l4.597 4.597-2.122 2.122L7 9.62l-4.595 4.597-2.122-2.122L4.878 7.5.282 2.904 2.404.782l4.595 4.596L11.596.782Z" fill="currentColor" fill-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+          <section>
+            <div>
+              <div>
+                <span class="sr-only">icon back</span>
+                <svg
+                        class="rotate-180 h-5 w-5 text-blue-gray-deep"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 13 18"
+                >
+                  <path d="m2 1 8 8-8 8" stroke="currentColor" stroke-width="3" fill="none"/>
+                </svg>
+              </div>
+              <img :src="selectedImage.full" :alt="selectedImage.alt">
+              <div>
+                <span class="sr-only">icon next</span>
+                <svg
+                        class="h-5 w-5 text-blue-gray-deep"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 13 18"
+                >
+                  <path d="m2 1 8 8-8 8" stroke="currentColor" stroke-width="3" fill="none"/>
+                </svg>
+              </div>
+            </div>
+            <ul>
+              <template x-for="image in product.images">
+                <li>
+                  <button
+                          type="button"
+                          x-on:click="selectImage(image.id)"
+                          class="border-2 rounded-xl overflow-hidden"
+                          :class="image.active ? 'opacity-50 border-orange' : 'border-transparent opacity-100'"
+                          :disabled="image.active"
+                  >
+                    <img :src="image.thumb" :alt="image.alt">
+                  </button>
+                </li>
+              </template>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="src/shop.js"></script>
 </body>
 </html>

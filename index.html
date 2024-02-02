@@ -24,6 +24,10 @@
   <!-- Alpine Core -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+<!--  - Open a lightbox gallery by clicking on the large product image-->
+<!--  - Switch the large product image by clicking on the small thumbnail images-->
+<!--  - Add items to the cart-->
+<!--  - View the cart and remove items from it-->
 
 </head>
 <body x-data="products()">
@@ -98,7 +102,7 @@
                         <ul class="space-y-4">
                           <template x-for="item in menuItems">
                             <li>
-                              <a href="item.url" x-text="item.title" class="font-bold text-lg"></a>
+                              <a :href="item.url" x-text="item.title" class="font-bold text-lg"></a>
                             </li>
                           </template>
                         </ul>
@@ -118,7 +122,7 @@
           <ul class="flex items-center gap-6">
             <template x-for="item in menuItems">
               <li>
-                <a href="item.url" x-text="item.title"></a>
+                <a :href="item.url" x-text="item.title"></a>
               </li>
             </template>
           </ul>
@@ -144,36 +148,33 @@
     </div>
   </header>
   <main>
-
     <section>
       <section>
         <div>
-          <img src="./images/image-product-1.jpg" alt="product image 1">
+          <img :src="selectedImage.full" :alt="selectedImage.alt">
         </div>
         <ul>
-          <li>
-            <button>
-              <img src="./images/image-product-1-thumbnail.jpg" alt="product image 1">
-            </button>
-            <button>
-              <img src="./images/image-product-2-thumbnail.jpg" alt="product image 2">
-            </button>
-            <button>
-              <img src="./images/image-product-3-thumbnail.jpg" alt="product image 3">
-            </button>
-            <button>
-              <img src="./images/image-product-4-thumbnail.jpg" alt="product image 4">
-            </button>
-          </li>
+          <template x-for="image in product.images">
+            <li>
+              <button
+                    x-on:click="selectImage(image.id)"
+                    class="border-2 rounded-xl overflow-hidden"
+                    :class="image.active ? 'opacity-50 border-orange' : 'border-transparent opacity-100'"
+                    :disabled="image.active"
+              >
+                <img :src="image.thumb" :alt="image.alt">
+              </button>
+            </li>
+          </template>
         </ul>
       </section>
       <section>
-        <span>Sneaker Company</span>
-        <h2>Fall Limited Edition Sneakers</h2>
-        <p>These low-profile sneakers are your perfect casual wear companion. Featuring a durable rubber outer sole, they’ll withstand everything the weather can offer.</p>
-        <span>$125.00</span>
-        <span>50%</span>
-        <span>$250.00</span>
+        <span x-text="product.company"></span>
+        <h2 x-text="product.title"></h2>
+        <p x-text="product.description"></p>
+        <span>&dollar;<span x-text="product.price"></span></span>
+        <span><span x-text="product.discount"></span>&#37;</span>
+        <span>&dollar;<span x-text="product.fullAmount"></span></span>
         <div>
           <button>
             <span class="sr-only">icon minus</span>

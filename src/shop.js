@@ -30,7 +30,26 @@ window.products = function() {
 			this.product.images.find((image) => image.id === id).active = true
 		},
 		lightboxActive: false,
-		cartOpened: false,
-		count: 0
+		cartOpened: true,
+		count: 0,
+		order: [
+			{
+				title: '',
+				price: null,
+				imageThumb: '',
+				countInCart: 0,
+				totalPrice: null
+			}
+		],
+		aadToCart() {
+			this.order.push = {
+				title: this.product.title,
+				price: null,
+				imageThumb: this.product.images[0].thumb,
+				imageAlt: this.product.images[0].alt,
+				countInCart: this.count,
+				totalPrice: this.product.price * this.order.countInCart
+			}
+		}
 	}
 }

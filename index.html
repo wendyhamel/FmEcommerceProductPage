@@ -20,6 +20,7 @@
   <!-- Alpine.js -->
   <!-- Alpine Plugins -->
   <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
 
   <!-- Alpine Core -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -129,7 +130,7 @@
         </nav>
       </section>
       <section class="flex items-center gap-5">
-        <button type="button" x-on:click="cartOpened = !cartOpened">
+        <button type="button" x-on:click="cartOpened = !cartOpened" x-intersect:leave="cartOpened = false">
           <span class="sr-only">shopping cart</span>
           <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -140,35 +141,37 @@
             <path d="M20.925 3.641H3.863L3.61.816A.896.896 0 0 0 2.717 0H.897a.896.896 0 1 0 0 1.792h1l1.031 11.483c.073.828.52 1.726 1.291 2.336C2.83 17.385 4.099 20 6.359 20c1.875 0 3.197-1.87 2.554-3.642h4.905c-.642 1.77.677 3.642 2.555 3.642a2.72 2.72 0 0 0 2.717-2.717 2.72 2.72 0 0 0-2.717-2.717H6.365c-.681 0-1.274-.41-1.53-1.009l14.321-.842a.896.896 0 0 0 .817-.677l1.821-7.283a.897.897 0 0 0-.87-1.114ZM6.358 18.208a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm10.015 0a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm2.021-7.243-13.8.81-.57-6.341h15.753l-1.383 5.53Z" fill="currentColor"/>
           </svg>
         </button>
-        <div x-show="cartOpened" class="fixed z-20 inset-x-0 top-16 mt-2 mx-2 bg-white shadow-lg rounded-lg">
+        <div x-show="cartOpened" x-on:click.outside="cartOpened = false" class="fixed z-20 inset-x-0 top-16 mt-2 mx-2 bg-white shadow-lg rounded-lg">
           <section class="p-5 border-b border-blue-gray">
             <h3 class="font-bold">Cart</h3>
           </section>
           <section class="p-5">
-            <p x-show="order.countInCart = 0" class="text-blue-gray-dark font-bold">Your cart is empty.</p>
-            <div x-show="order.countInCart > 0">
+            <p x-show="!order.length" class="text-blue-gray-dark font-bold">Your cart is empty.</p>
+            <div x-show="order.length">
               <template x-for="item in order">
-                <img :src="item.imageThumb" alt="item.imageAlt">
-                <h2 x-text="product.title"></h2>
-                <p>
-                  <span>&dollar;<span x-text="item.price"></span></span>
-                  x <span x-text="item.countInCart"></span>
-                  <span class="font-bold">&dollar;<span x-text="item.totalPrice"></span></span>
-                </p>
                 <div>
-                  <span class="sr-only">icon delete</span>
-                  <svg
-                          class="h-5 w-5 text-blue-gray"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink"
-                          viewBox="0 0 14 16"
-                  >
-                    <defs>
-                      <path d="M0 2.625V1.75C0 1.334.334 1 .75 1h3.5l.294-.584A.741.741 0 0 1 5.213 0h3.571a.75.75 0 0 1 .672.416L9.75 1h3.5c.416 0 .75.334.75.75v.875a.376.376 0 0 1-.375.375H.375A.376.376 0 0 1 0 2.625Zm13 1.75V14.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 1 14.5V4.375C1 4.169 1.169 4 1.375 4h11.25c.206 0 .375.169.375.375ZM4.5 6.5c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Z" id="trasha"/>
-                    </defs>
-                    <use fill="currentColor" xlink:href="#trasha"/>
-                  </svg>
+                  <img :src="item.imageThumb" :alt="item.imageAlt">
+                  <h2 x-text="item.title"></h2>
+                  <p>
+                    <span>&dollar;<span x-text="item.price"></span></span>
+                    x <span x-text="item.quantity"></span>
+                    <span class="font-bold">&dollar;<span x-text="item.totalPrice"></span></span>
+                  </p>
+                  <button type="button" x-on:click="removeFromCart(item.id)">
+                    <span class="sr-only">icon delete</span>
+                    <svg
+                        class="h-5 w-5 text-blue-gray"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        viewBox="0 0 14 16"
+                    >
+                      <defs>
+                        <path d="M0 2.625V1.75C0 1.334.334 1 .75 1h3.5l.294-.584A.741.741 0 0 1 5.213 0h3.571a.75.75 0 0 1 .672.416L9.75 1h3.5c.416 0 .75.334.75.75v.875a.376.376 0 0 1-.375.375H.375A.376.376 0 0 1 0 2.625Zm13 1.75V14.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 1 14.5V4.375C1 4.169 1.169 4 1.375 4h11.25c.206 0 .375.169.375.375ZM4.5 6.5c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Z" id="trasha"/>
+                      </defs>
+                      <use fill="currentColor" xlink:href="#trasha"/>
+                    </svg>
+                  </button>
                 </div>
               </template>
             </div>
@@ -253,9 +256,8 @@
         </div>
       </section>
       <button
-          x-on:click="count++; addToCart()"
+          x-on:click="addToCart();"
           type="button"
-          class=""
       >
         <span class="sr-only">shopping cart</span>
         <svg

@@ -36,17 +36,18 @@ window.products = function() {
 		order: [],
 		addToCart() {
 			this.order = this.order.filter((id) => id === this.id)
+			let totalPrice = this.count * this.product.price
 			if (this.count === 0) {
 				this.count++
 			}
 			let item = {
 				id : 0,
 				title : this.product.title,
-				price : this.product.price,
+				price : this.product.price.toFixed(2),
 				imageThumb : this.product.images[0].thumb,
 				imageAlt : this.product.images[0].alt,
 				quantity : this.count,
-				totalPrice : this.count * this.product.price,
+				totalPrice : totalPrice.toFixed(2),
 			}
 			return this.order.push(item)
 		},

@@ -33,8 +33,8 @@
 </head>
 <body x-data="products()">
   <header class="relative">
-    <div class="w-full max-w-6xl mx-auto p-5 flex items-center justify-between gap-5">
-      <section class="flex items-center gap-5">
+    <div class="w-full max-w-6xl mx-auto p-5 flex items-center justify-between gap-6">
+      <section class="flex items-center gap-4 px-1">
         <nav class="md:hidden">
           <button
               type="button"
@@ -42,7 +42,7 @@
           >
             <span class="sr-only">icon menu</span>
             <svg
-                class="h-5 w-6 text-blue-gray-dark"
+                class="h-3.5 text-blue-gray-dark -translate-y-px"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16 15"
@@ -115,7 +115,7 @@
             </div>
           </div>
         </nav>
-        <a href="#">
+        <a href="#" class="-translate-y-1">
           <h1 class="sr-only">Sneakers</h1>
           <img src="./images/logo.svg" alt="sneakers logo">
         </a>
@@ -130,54 +130,81 @@
         </nav>
       </section>
       <section class="flex items-center gap-5">
-        <button type="button" x-on:click="cartOpened = !cartOpened" x-intersect:leave="cartOpened = false">
+        <button
+            type="button"
+            x-on:click="cartOpened = !cartOpened"
+            x-intersect:leave="cartOpened = false"
+            class="relative text-blue-gray-dark hover:text-blue-gray-deep"
+            :class="{'text-blue-gray-deep' : cartOpened}"
+        >
+          <span
+              x-show="order.length"
+              class="absolute rounded-full bg-orange text-white text-xs px-2 top-0 right-0 -translate-y-1/2 translate-x-1/2"
+          >
+            <span x-text="order[0].quantity"></span>
+          </span>
           <span class="sr-only">shopping cart</span>
           <svg
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
               viewBox="0 0 22 20"
-              class="h-5 w-5 text-blue-gray-dark"
+              class="h-5 w-5"
           >
             <path d="M20.925 3.641H3.863L3.61.816A.896.896 0 0 0 2.717 0H.897a.896.896 0 1 0 0 1.792h1l1.031 11.483c.073.828.52 1.726 1.291 2.336C2.83 17.385 4.099 20 6.359 20c1.875 0 3.197-1.87 2.554-3.642h4.905c-.642 1.77.677 3.642 2.555 3.642a2.72 2.72 0 0 0 2.717-2.717 2.72 2.72 0 0 0-2.717-2.717H6.365c-.681 0-1.274-.41-1.53-1.009l14.321-.842a.896.896 0 0 0 .817-.677l1.821-7.283a.897.897 0 0 0-.87-1.114ZM6.358 18.208a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm10.015 0a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm2.021-7.243-13.8.81-.57-6.341h15.753l-1.383 5.53Z" fill="currentColor"/>
           </svg>
         </button>
-        <div x-show="cartOpened" x-on:click.outside="cartOpened = false" class="fixed z-20 inset-x-0 top-16 mt-2 mx-2 bg-white shadow-lg rounded-lg">
-          <section class="p-5 border-b border-blue-gray">
-            <h3 class="font-bold">Cart</h3>
+        <div
+            x-show="cartOpened"
+            x-on:click.outside="cartOpened = false"
+            class="fixed z-20 inset-x-0 top-16 mt-2 mx-2 bg-white shadow-xl border border-blue-gray-light rounded-lg"
+        >
+          <section class="p-5 border-b border-blue-gray/40">
+            <h3 class="font-bold text-sm">Cart</h3>
           </section>
-          <section class="p-5">
-            <p x-show="!order.length" class="text-blue-gray-dark font-bold">Your cart is empty.</p>
+          <section x-show="!order.length" class="grid place-content-center aspect-[19/10] py-5 px-6">
+            <p class="text-blue-gray-dark font-bold font-xs">Your cart is empty.</p>
+          </section>
+          <section x-show="order.length" class="pt-6 px-5 pb-8">
             <div x-show="order.length">
               <template x-for="item in order">
-                <div>
-                  <img :src="item.imageThumb" :alt="item.imageAlt">
-                  <h2 x-text="item.title"></h2>
-                  <p>
-                    <span>&dollar;<span x-text="item.price"></span></span>
-                    x <span x-text="item.quantity"></span>
-                    <span class="font-bold">&dollar;<span x-text="item.totalPrice"></span></span>
-                  </p>
-                  <button type="button" x-on:click="removeFromCart(item.id)">
-                    <span class="sr-only">icon delete</span>
-                    <svg
-                        class="h-5 w-5 text-blue-gray"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        viewBox="0 0 14 16"
-                    >
-                      <defs>
-                        <path d="M0 2.625V1.75C0 1.334.334 1 .75 1h3.5l.294-.584A.741.741 0 0 1 5.213 0h3.571a.75.75 0 0 1 .672.416L9.75 1h3.5c.416 0 .75.334.75.75v.875a.376.376 0 0 1-.375.375H.375A.376.376 0 0 1 0 2.625Zm13 1.75V14.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 1 14.5V4.375C1 4.169 1.169 4 1.375 4h11.25c.206 0 .375.169.375.375ZM4.5 6.5c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Z" id="trasha"/>
-                      </defs>
-                      <use fill="currentColor" xlink:href="#trasha"/>
-                    </svg>
-                  </button>
+                <div class="space-y-6">
+                  <div class="flex items-center w-full">
+                    <div>
+                      <img :src="item.imageThumb" :alt="item.imageAlt" class="rounded w-12 h-12 object-cover">
+                    </div>
+                    <div class="grow pl-4 pr-1 text-blue-gray-dark">
+                      <h2 x-text="item.title"></h2>
+                      <p class="inline-flex gap-1">
+                        <span>&dollar;<span x-text="item.price"></span></span>
+                        x <span x-text="item.quantity"></span>
+                        <span class="translate-x-1 font-bold text-blue-gray-deep">&dollar;<span x-text="item.totalPrice"></span></span>
+                      </p>
+                    </div>
+                    <div>
+                      <button type="button" x-on:click="removeFromCart(item.id)" class="text-blue-gray hover:text-orange">
+                        <span class="sr-only">icon delete</span>
+                        <svg
+                            class="w-3.5"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 14 16"
+                        >
+                          <defs>
+                            <path d="M0 2.625V1.75C0 1.334.334 1 .75 1h3.5l.294-.584A.741.741 0 0 1 5.213 0h3.571a.75.75 0 0 1 .672.416L9.75 1h3.5c.416 0 .75.334.75.75v.875a.376.376 0 0 1-.375.375H.375A.376.376 0 0 1 0 2.625Zm13 1.75V14.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 1 14.5V4.375C1 4.169 1.169 4 1.375 4h11.25c.206 0 .375.169.375.375ZM4.5 6.5c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Z" id="trasha"/>
+                          </defs>
+                          <use fill="currentColor" xlink:href="#trasha"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                <button type="button" class="w-full bg-orange rounded-lg text-white font-bold text-center p-3.5">Checkout</button>
                 </div>
               </template>
             </div>
           </section>
         </div>
-        <button class="rounded-full w-6 h-6" type="button">
+        <button class="rounded-full w-6 h-6 border border-transparent hover:border-orange" type="button">
           <span class="sr-only">user avatar</span>
           <img src="./images/image-avatar.png" alt="user avatar">
         </button>

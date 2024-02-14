@@ -13,6 +13,9 @@ tailwind.config = {
 				'blue-gray-light': 'hsl(223, 64%, 98%)',
 				'white': 'hsl(0, 0%, 100%)',
 				'black': 'hsl(0, 0%, 0%)', // (with 75% opacity for lightbox background)
+			},
+			fontSize: {
+				'2.5xl': ['1.6125rem', '2rem'],
 			}
 		}
 	}

@@ -207,7 +207,7 @@
             </div>
           </section>
         </div>
-        <button class="rounded-full w-6 h-6 border border-transparent hover:border-orange" type="button">
+        <button class="rounded-full w-6 h-6 border border-transparent hover:border-orange ease-in-out duration-150" type="button">
           <span class="sr-only">user avatar</span>
           <img src="./images/image-avatar.png" alt="user avatar">
         </button>
@@ -219,34 +219,31 @@
       <section class="relative md:hidden">
         <ul class="relative grid">
           <template x-for="image in product.images">
-            <li class="col-start-1 row-start-1">
-              <button
-                      type="button"
-                      class="w-full aspect-[10/8] overflow-hidden"
-                      :class="image.active ? 'block' : 'hidden'"
+            <li
+                class="col-start-1 row-start-1 w-full aspect-[10/8] overflow-hidden transition-opacity ease-out duration-300"
+                :class="image.active ? 'opacity-100' : 'opacity-0'"
               >
                 <img :src="image.full" :alt="image.alt" class="w-full object-cover -translate-y-9">
-              </button>
             </li>
           </template>
         </ul>
         <div class="absolute left-0 top-1/2 inset-x-0 -translate-y-1/2 flex justify-between items-center px-4">
           <button
                   x-on:click="previousImage()"
-              class="rounded-full bg-white grid place-content-center w-9 h-9 text-blue-gray-deep"
+              class="rounded-full bg-white grid place-content-center w-9 h-9 text-blue-gray-deep hover:text-orange ease-in-out duration-150"
           >
             <span class="sr-only">previous</span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 18" class="w-2.5 transform rotate-180">
-              <path d="m2 1 8 8-8 8" stroke="#1D2026" stroke-width="4" fill="none"/>
+              <path d="m2 1 8 8-8 8" stroke="currentColor" stroke-width="4" fill="none"/>
             </svg>
           </button>
           <button
               x-on:click="nextImage()"
-              class="rounded-full bg-white grid place-content-center w-9 h-9 text-blue-gray-deep"
+              class="rounded-full bg-white grid place-content-center w-9 h-9 text-blue-gray-deep hover:text-orange ease-in-out duration-150"
           >
             <span class="sr-only">next</span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 18" class="w-2.5">
-              <path d="m2 1 8 8-8 8" stroke="#1D2026" stroke-width="4" fill="none"/>
+              <path d="m2 1 8 8-8 8" stroke="currentColor" stroke-width="4" fill="none"/>
             </svg>
           </button>
         </div>
@@ -261,7 +258,7 @@
               <button
                     type="button"
                     x-on:click="selectImage(image.id)"
-                    class="border-2 rounded-xl overflow-hidden hover:opacity-70"
+                    class="border-2 rounded-xl overflow-hidden hover:opacity-70 ease-in-out duration-150"
                     :class="image.active ? 'opacity-50 border-orange' : 'border-transparent opacity-100'"
                     :disabled="image.active"
               >
@@ -284,7 +281,7 @@
           <button
               x-on:click="count--"
               type="button"
-              class="w-12 h-12 grid place-content-center hover:opacity-60"
+              class="w-12 h-12 grid place-content-center hover:opacity-60 ease-in-out duration-150"
           >
             <span class="sr-only">icon minus</span>
             <svg
@@ -304,7 +301,7 @@
           <button
               x-on:click="count++"
               type="button"
-              class="w-12 h-12 grid place-content-center hover:opacity-60"
+              class="w-12 h-12 grid place-content-center hover:opacity-60 ease-in-out duration-150"
           >
             <span class="sr-only">icon plus</span>
             <svg
@@ -325,7 +322,7 @@
          <button
              x-on:click="addToCart();"
              type="button"
-             class="w-full bg-orange text-white rounded-lg px-6 py-4 flex items-center justify-center gap-4 hover:bg-opacity-60"
+             class="w-full bg-orange text-white rounded-lg shadow-xl shadow-orange/30 px-6 py-4 flex items-center justify-center gap-4 hover:bg-opacity-60 ease-in-out duration-150"
          >
            <span class="sr-only">shopping cart</span>
            <svg

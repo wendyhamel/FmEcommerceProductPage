@@ -359,7 +359,7 @@
     </section>
   </footer>
 
-  <div x-show="lightboxActive" class="relative z-10" aria-labelledby="product-images-lightbox" role="dialog" aria-modal="true">
+  <div x-show="lightboxActive" x-on:click="lightboxActive = false" class="relative z-10" aria-labelledby="product-images-lightbox" role="dialog" aria-modal="true">
     <div
           x-show="lightboxActive"
           x-transition:enter="ease-out duration-300"

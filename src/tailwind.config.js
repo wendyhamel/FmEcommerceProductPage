@@ -16,6 +16,7 @@ tailwind.config = {
 			},
 			fontSize: {
 				'2.5xl': ['1.6125rem', '2rem'],
+				'4.5xl': ['2.5rem', '3rem'],
 			}
 		}
 	}

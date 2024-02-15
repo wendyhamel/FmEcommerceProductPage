@@ -120,7 +120,7 @@
           <img src="./images/logo.svg" alt="sneakers logo">
         </a>
         <nav class="hidden md:block">
-          <ul class="flex items-center gap-8">
+          <ul class="flex items-center gap-6 lg:gap-8">
             <template x-for="item in menuItems">
               <li class="group relative">
                 <a :href="item.url" x-text="item.title" class="relative block text-blue-gray-dark text-sm tracking-wide py-8 group-hover:text-blue-gray-deep transition-opacity ease-out duration-300"></a>
@@ -216,7 +216,7 @@
     </div>
   </header>
   <main class="pb-16 mb-1 w-full max-w-6xl mx-auto md:pt-1 md:px-11">
-    <section class="md:px-12 md:flex md:gap-24">
+    <section class="md:flex md:gap-4 lg:gap-12 lg:px-12 xl:gap-24">
       <section class="relative md:hidden">
         <ul class="relative grid">
           <template x-for="image in product.images">
@@ -228,7 +228,7 @@
             </li>
           </template>
         </ul>
-        <div class="absolute left-0 top-1/2 inset-x-0 -translate-y-1/2 flex justify-between items-center px-4">
+        <div class="absolute top-1/2 inset-x-0 -translate-y-1/2 flex justify-between items-center px-4">
           <button
                   x-on:click="previousImage()"
               class="rounded-full bg-white grid place-content-center w-9 h-9 text-blue-gray-deep hover:text-orange ease-in-out duration-150"
@@ -250,24 +250,26 @@
         </div>
       </section>
       <section class="hidden md:block lg:shrink-0">
-        <button type="button" x-on:click="lightboxActive = true" class="rounded-xl overflow-hidden md:max-w-[26.5rem]">
+        <button type="button" x-on:click="lightboxActive = true" class="rounded-xl overflow-hidden lg:max-w-[26.5rem]">
           <img :src="selectedImage.full" :alt="selectedImage.alt">
         </button>
-        <ul class="flex gap-6 md:mt-6 md:max-w-[26rem]">
+        <ul class="flex gap-4 md:mt-6 lg:max-w-[26rem] xl:gap-6">
           <template x-for="image in product.images">
             <li>
               <button
                     type="button"
                     x-on:click="selectImage(image.id)"
-                    class="border-2 rounded-xl overflow-hidden hover:opacity-50 ease-in-out duration-150"
+                    class="border-2 rounded-xl overflow-hidden group"
                     :class="image.active ? 'border-orange' : 'border-transparent'"
                     :disabled="image.active"
               >
-                <img
-                    :src="image.thumb"
-                    :alt="image.alt"
-                    :class="image.active ? 'opacity-30' : 'opacity-100'"
-                >
+                <div class="bg-white">
+                  <img
+                      :src="image.thumb"
+                      :alt="image.alt"
+                      :class="image.active ? 'opacity-30' : 'opacity-100 group-hover:opacity-50 ease-in-out duration-150'"
+                  >
+                </div>
               </button>
             </li>
           </template>
@@ -379,57 +381,74 @@
               x-transition:leave="ease-in duration-200"
               x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
               x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              class="relative transform overflow-hidden text-left transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
+              class="relative transform overflow-hidden text-left transition-all sm:my-8 sm:w-full sm:max-w-[38rem] sm:p-6"
         >
-          <div>
+          <div class="w-full text-end mb-4">
             <button x-on:click="lightboxActive = false" type="button" class="relative rounded-md text-blue-gray-dark hover:text-orange focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2">
               <span class="sr-only">Close lightbox</span>
               <svg
                       aria-hidden="true"
                       viewBox="0 0 14 15"
-                      class="h-5 w-5"
+                      class="h-6 w-6"
               >
                 <path d="m11.596.782 2.122 2.122L9.12 7.499l4.597 4.597-2.122 2.122L7 9.62l-4.595 4.597-2.122-2.122L4.878 7.5.282 2.904 2.404.782l4.595 4.596L11.596.782Z" fill="currentColor" fill-rule="evenodd"/>
               </svg>
             </button>
           </div>
           <section>
-            <div>
-              <div>
-                <span class="sr-only">icon back</span>
-                <svg
-                        class="rotate-180 h-5 w-5 text-blue-gray-deep"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 13 18"
+            <div class="relative">
+              <ul class="relative grid bg-white rounded-xl overflow-hidden">
+                <template x-for="image in product.images">
+                  <li
+                      class="col-start-1 row-start-1 w-full aspect-square transition-opacity ease-out duration-300"
+                      :class="image.active ? 'opacity-100' : 'opacity-0'"
+                  >
+                    <img
+                        :src="selectedImage.full"
+                        :alt="selectedImage.alt"
+                        class="w-full object-cover"
+                    >
+                  </li>
+                </template>
+              </ul>
+              <div class="absolute top-1/2 inset-x-0 -translate-y-1/2 flex justify-between items-center -mx-6">
+                <button
+                        x-on:click="previousImage()"
+                        class="rounded-full bg-white grid place-content-center w-12 h-12 text-blue-gray-deep hover:text-orange ease-in-out duration-150"
                 >
-                  <path d="m2 1 8 8-8 8" stroke="currentColor" stroke-width="3" fill="none"/>
-                </svg>
-              </div>
-              <img :src="selectedImage.full" :alt="selectedImage.alt">
-              <div>
-                <span class="sr-only">icon next</span>
-                <svg
-                        class="h-5 w-5 text-blue-gray-deep"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 13 18"
+                  <span class="sr-only">previous</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 18" class="w-3 transform rotate-180">
+                    <path d="m2 1 8 8-8 8" stroke="currentColor" stroke-width="3" fill="none"/>
+                  </svg>
+                </button>
+                <button
+                        x-on:click="nextImage()"
+                        class="rounded-full bg-white grid place-content-center w-12 h-12 text-blue-gray-deep hover:text-orange ease-in-out duration-150"
                 >
-                  <path d="m2 1 8 8-8 8" stroke="currentColor" stroke-width="3" fill="none"/>
-                </svg>
+                  <span class="sr-only">next</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 18" class="w-3">
+                    <path d="m2 1 8 8-8 8" stroke="currentColor" stroke-width="3" fill="none"/>
+                  </svg>
+                </button>
               </div>
             </div>
-            <ul>
+            <ul class="flex justify-center gap-6 mt-6 mx-12">
               <template x-for="image in product.images">
                 <li>
                   <button
                           type="button"
                           x-on:click="selectImage(image.id)"
-                          class="border-2 rounded-xl overflow-hidden"
-                          :class="image.active ? 'opacity-50 border-orange' : 'border-transparent opacity-100'"
+                          class="border-2 rounded-xl overflow-hidden group"
+                          :class="image.active ? 'border-orange' : 'border-transparent'"
                           :disabled="image.active"
                   >
-                    <img :src="image.thumb" :alt="image.alt">
+                    <div class="bg-white">
+                      <img
+                          :src="image.thumb"
+                          :alt="image.alt"
+                          :class="image.active ? 'opacity-30' : 'opacity-100 group-hover:opacity-50 ease-in-out duration-150'"
+                      >
+                    </div>
                   </button>
                 </li>
               </template>

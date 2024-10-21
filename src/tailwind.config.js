@@ -1,9 +1,9 @@
 tailwind.config = {
 	theme: {
-		fontFamily: {
-			'sans': ['Kumbh Sans', 'sans-serif'],
-		},
 		extend: {
+			fontFamily: {
+				'sans': ['Kumbh Sans', 'sans-serif'],
+			},
 			colors: {
 				'orange': 'hsl(26, 100%, 55%)',
 				'orange-pale': 'hsl(25, 100%, 94%)',

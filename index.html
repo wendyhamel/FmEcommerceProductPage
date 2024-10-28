@@ -136,12 +136,10 @@
             :class="{'text-blue-gray-deep' : cartOpened}"
         >
           <span
-              x-show="order.length"
+              x-show="order.products.length"
               class="absolute rounded-full bg-orange text-white text-xs px-2 top-0 right-0 -translate-y-1/2 translate-x-1/2"
           >
-             <template x-for="item in order">
-               <span x-text="item.quantity"></span>
-             </template>
+            <span x-text="order.totalProducts"></span>
           </span>
           <span class="sr-only">shopping cart</span>
           <svg
@@ -162,46 +160,44 @@
           <section class="p-5 border-b border-blue-gray/40">
             <h3 class="font-bold text-sm">Cart</h3>
           </section>
-          <section x-show="!order.length" class="grid place-content-center aspect-[19/10] py-5 px-6">
+          <section x-show="!order.products.length" class="grid place-content-center aspect-[19/10] py-5 px-6">
             <p class="text-blue-gray-dark font-bold font-xs">Your cart is empty.</p>
           </section>
-          <section x-show="order.length" class="pt-6 px-5 pb-8">
-            <div x-show="order.length">
-<!--              <template x-for="product in order" :key="product.index">-->
-<!--                <div class="space-y-6">-->
-<!--                  <div class="flex items-center w-full">-->
-<!--                    <div>-->
-<!--                      <img :src="product.imageThumb" :alt="product.imageAlt" class="rounded w-12 h-12 object-cover">-->
-<!--                    </div>-->
-<!--                    <div class="grow pl-4 pr-1 text-blue-gray-dark">-->
-<!--                      <h2 x-text="product.title"></h2>-->
-<!--                      <p class="inline-flex gap-1">-->
-<!--                        <span>&dollar;<span x-text="product.price.toFixed(2)"></span></span>-->
-<!--                        x <span x-text="product.quantity"></span>-->
-<!--                        <span class="translate-x-1 font-bold text-blue-gray-deep">&dollar;<span x-text="product.totalPrice.toFixed(2)"></span></span>-->
-<!--                      </p>-->
-<!--                    </div>-->
-<!--                    <div>-->
-<!--                      <button type="button" x-on:click="removeFromCart(product)" class="text-blue-gray hover:text-orange">-->
-<!--                        <span class="sr-only">icon delete</span>-->
-<!--                        <svg-->
-<!--                            class="w-3.5"-->
-<!--                            aria-hidden="true"-->
-<!--                            xmlns="http://www.w3.org/2000/svg"-->
-<!--                            xmlns:xlink="http://www.w3.org/1999/xlink"-->
-<!--                            viewBox="0 0 14 16"-->
-<!--                        >-->
-<!--                          <defs>-->
-<!--                            <path d="M0 2.625V1.75C0 1.334.334 1 .75 1h3.5l.294-.584A.741.741 0 0 1 5.213 0h3.571a.75.75 0 0 1 .672.416L9.75 1h3.5c.416 0 .75.334.75.75v.875a.376.376 0 0 1-.375.375H.375A.376.376 0 0 1 0 2.625Zm13 1.75V14.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 1 14.5V4.375C1 4.169 1.169 4 1.375 4h11.25c.206 0 .375.169.375.375ZM4.5 6.5c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Z" id="trasha"/>-->
-<!--                          </defs>-->
-<!--                          <use fill="currentColor" xlink:href="#trasha"/>-->
-<!--                        </svg>-->
-<!--                      </button>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                <button type="button" class="w-full bg-orange rounded-lg text-white font-bold text-center p-3.5 hover:bg-opacity-60">Checkout</button>-->
-<!--                </div>-->
-<!--              </template>-->
+          <section x-show="order.products.length" class="pt-6 px-5 pb-8">
+            <div class="space-y-6">
+              <template x-for="product in order.products">
+                  <div class="flex items-center w-full">
+                    <div>
+                      <img :src="product.imageThumb" :alt="product.imageAlt" class="rounded w-12 h-12 object-cover">
+                    </div>
+                    <div class="grow pl-4 pr-1 text-blue-gray-dark">
+                      <h2 x-text="product.title"></h2>
+                      <p class="inline-flex gap-1">
+                        <span>&dollar;<span x-text="product.price.toFixed(2)"></span></span>
+                        x <span x-text="product.quantity"></span>
+                        <span class="translate-x-1 font-bold text-blue-gray-deep">&dollar;<span x-text="product.total.toFixed(2)"></span></span>
+                      </p>
+                    </div>
+                    <div>
+                      <button type="button" x-on:click="removeFromCart(product)" class="text-blue-gray hover:text-orange">
+                        <span class="sr-only">icon delete</span>
+                        <svg
+                            class="w-3.5"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 14 16"
+                        >
+                          <defs>
+                            <path d="M0 2.625V1.75C0 1.334.334 1 .75 1h3.5l.294-.584A.741.741 0 0 1 5.213 0h3.571a.75.75 0 0 1 .672.416L9.75 1h3.5c.416 0 .75.334.75.75v.875a.376.376 0 0 1-.375.375H.375A.376.376 0 0 1 0 2.625Zm13 1.75V14.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 1 14.5V4.375C1 4.169 1.169 4 1.375 4h11.25c.206 0 .375.169.375.375ZM4.5 6.5c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Zm3 0c0-.275-.225-.5-.5-.5s-.5.225-.5.5v7c0 .275.225.5.5.5s.5-.225.5-.5v-7Z" id="trasha"/>
+                          </defs>
+                          <use fill="currentColor" xlink:href="#trasha"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+              </template>
+              <button type="button" class="w-full bg-orange rounded-lg text-white font-bold text-center p-3.5 hover:bg-opacity-60">Checkout</button>
             </div>
           </section>
         </div>
@@ -217,7 +213,7 @@
       <section class="relative lg:shrink-0">
         <section class="relative md:rounded-xl md:overflow-hidden lg:max-w-[26.5rem]">
           <ul class="relative grid">
-            <template x-for="image in selectedProduct.images" :key="index">
+            <template x-for="image in selectedProduct.images">
               <li
                   class="col-start-1 row-start-1 w-full aspect-[10/8] overflow-hidden md:aspect-square"
                   x-show="activeImage.full === image.full"
@@ -259,7 +255,7 @@
           </div>
         </section>
         <ul class="hidden md:block md:flex gap-4 md:mt-6 lg:max-w-[26rem] xl:gap-6">
-          <template x-for="image in selectedProduct.images" :key="index">
+          <template x-for="image in selectedProduct.images">
             <li>
               <button
                   type="button"
@@ -335,7 +331,7 @@
           </div>
           <div class="md:col-span-3">
             <button
-                    x-on:click="addToCart(product);"
+                    x-on:click="addToCart(selectedProduct);"
                     type="button"
                     class="w-full bg-orange text-white rounded-lg shadow-xl shadow-orange/30 px-6 py-4 flex items-center justify-center gap-4 hover:bg-opacity-60 ease-in-out duration-150"
             >
@@ -400,10 +396,10 @@
               </svg>
             </button>
           </div>
-          <section>
+          <section x-on:click.outside="lightboxActive = false">
             <div class="relative">
               <ul class="relative grid bg-white rounded-xl overflow-hidden">
-                <template x-for="image in selectedProduct.images" :key="index">
+                <template x-for="image in selectedProduct.images">
                   <li
                           class="col-start-1 row-start-1 w-full aspect-square"
                           x-show="activeImage.full === image.full"

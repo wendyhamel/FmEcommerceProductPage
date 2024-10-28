@@ -8,22 +8,6 @@ window.products = function() {
 			{title: 'About', url: '#'},
 			{title: 'Contact', url: '#'},
 		],
-		products: [
-			{
-				company: 'Sneaker Company',
-				title: 'Fall Limited Edition Sneakers',
-				description: 'These low-profile sneakers are your perfect casual wear companion. Featuring a durable rubber outer sole, they’ll withstand everything the weather can offer.',
-				price: 125.00,
-				discount: 50,
-				fullAmount: 250.00,
-				images: [
-					{full: './images/image-product-1.jpg', thumb: './images/image-product-1-thumbnail.jpg', alt:'product image 1'},
-					{full: './images/image-product-2.jpg', thumb: './images/image-product-2-thumbnail.jpg', alt:'product image 2'},
-					{full: './images/image-product-3.jpg', thumb: './images/image-product-3-thumbnail.jpg', alt:'product image 3'},
-					{full: './images/image-product-4.jpg', thumb: './images/image-product-4-thumbnail.jpg', alt:'product image 4'},
-				]
-			},
-		],
 		selectedProduct: {
 			company: 'Sneaker Company',
 			title: 'Fall Limited Edition Sneakers',
@@ -81,22 +65,27 @@ window.products = function() {
 		cartOpened: false,
 		count: 0,
 		order: {
-			products: []
+			products: [],
+			totalProducts: null
 		},
 		addToCart(product) {
 			if (this.count === 0) {
 				this.count++
 			}
-			// imageThumb = product.images[0].thumb
-			// imageAlt = product.images[0].alt
-			// quantity = this.count
-			// totalPrice = product.quantity * product.price
+			let newProduct = {}
+			newProduct.title = product.title
+			newProduct.price = product.price
+			newProduct.imageThumb = this.activeImage.thumb
+			newProduct.imageAlt = this.activeImage.alt
+			newProduct.quantity = this.count
+			newProduct.total = newProduct.quantity * newProduct.price
+			this.order.totalProducts = this.order.totalProducts + newProduct.quantity
 			this.count = 0
-			console.log(product)
-			this.order.products.push(product)
+			console.log(newProduct)
+			this.order.products.push(newProduct)
 		},
 		removeFromCart(product) {
-			let position = this.order.lastIndexOf(product)
+			let position = this.order.products.lastIndexOf(product)
 			this.order.products.splice(position, 1)
 		}
 	}
